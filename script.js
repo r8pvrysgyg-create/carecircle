@@ -111,6 +111,14 @@ async function loadNotes() {
   });
 }
 document.getElementById("addAppt").onclick = async () => {
+  const user = auth.currentUser;
+
+  // 🚨 BLOCK NON-LOGGED USERS
+  if (!user) {
+    alert("You must be logged in to add appointments.");
+    return;
+  }
+
   const person = document.getElementById("apptPerson").value;
   const doctor = document.getElementById("apptDoctor").value;
   const date = document.getElementById("apptDate").value;
@@ -123,7 +131,7 @@ document.getElementById("addAppt").onclick = async () => {
     doctor,
     date,
     time,
-    createdBy: auth.currentUser.email,
+    createdBy: user.email,
     timestamp: serverTimestamp()
   });
 
