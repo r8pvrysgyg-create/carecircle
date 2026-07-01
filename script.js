@@ -57,7 +57,8 @@ document.getElementById("logoutBtn").onclick = () => {
 
 // AUTH STATE
 onAuthStateChanged(auth, user => {
-  if (user) {
+  if (user) {loadNotes();
+safeLoadAppointments();
     document.getElementById("user").innerText =
       "Logged in as: " + user.email;
 
@@ -105,6 +106,51 @@ async function loadNotes() {
       <div class="note">
         <b>${data.author}</b><br>
         ${data.text}
+      </div>
+    `;
+  });
+}
+document.getElementById("addAppt").onclick = async () => {
+  const person = document.getElementById("apptPerson").value;
+  const doctor = document.getElementById("apptDoctor").value;
+  const date = document.getElementById("apptDate").value;
+  const time = document.getElementById("apptTime").value;
+
+  if (!person || !doctor || !date) return;
+
+  await addDoc(collection(db, "appointments"), {
+    person,
+    doctor,
+    date,
+    time,
+    createdBy: auth.currentUser.email,
+    timestamp: serverTimestamp()
+  });
+
+  document.getElementById("apptPerson").value = "";
+  document.getElementById("apptDoctor").value = "";
+  document.getElementById("apptDate").value = "";
+  document.getElementById("apptTime").value = "";
+
+  loadAppointments();
+};
+
+
+async function loadAppointments() {
+  const snapshot = await getDocs(collection(db, "appointments"));
+  const div = document.getElementById("appointments");
+
+  div.innerHTML = "";
+
+  snapshot.forEach(doc => {
+    const a = doc.data();
+
+    div.innerHTML += `
+      <div class="note">
+        <b>${a.person}</b><br>
+        ${a.doctor}<br>
+        ${a.date} ${a.time || ""}
+        <br><small>added by ${a.createdBy}</small>
       </div>
     `;
   });
