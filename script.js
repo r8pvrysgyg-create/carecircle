@@ -32,7 +32,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
+import {
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 const provider = new GoogleAuthProvider();
 
 
