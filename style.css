@@ -1,0 +1,25 @@
+body {
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+}
+
+input {
+  padding: 10px;
+  width: 60%;
+  margin: 10px;
+}
+
+button {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.note {
+  background: #1e293b;
+  margin: 10px auto;
+  padding: 10px;
+  width: 60%;
+  border-radius: 8px;
+}
