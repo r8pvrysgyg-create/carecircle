@@ -29,6 +29,11 @@
         </div>
 
         <div class="card">
+          <h2>✅ Open Tasks</h2>
+          <div id="openTasks"></div>
+        </div>
+
+        <div class="card">
           <h2>📝 Recent Notes</h2>
           <div id="recentNotes"></div>
         </div>
@@ -51,6 +56,21 @@
 
         <h3>Upcoming Appointments</h3>
         <div id="appointments"></div>
+      </section>
+
+      <section class="card">
+        <h2>✅ Tasks</h2>
+
+        <div class="form-grid">
+          <input id="taskTitle" placeholder="Task, e.g. Pick up prescription" />
+          <input id="taskAssignedTo" placeholder="Assigned to" />
+          <input id="taskDueDate" type="date" />
+          <textarea id="taskNotes" placeholder="Task notes"></textarea>
+        </div>
+
+        <button id="addTask">Add Task</button>
+
+        <div id="tasks"></div>
       </section>
 
       <section class="card">
