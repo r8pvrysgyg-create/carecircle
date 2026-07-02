@@ -6,7 +6,7 @@ import { addTask, loadTasks } from "./tasks.js";
 document.getElementById("addNote").onclick = addNote;
 document.getElementById("addAppt").onclick = addAppointment;
 document.getElementById("addTask").onclick = addTask;
-
+ 
 setupAuth(
   async () => {
     await loadNotes();
