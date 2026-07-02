@@ -3,6 +3,7 @@ import {
   addDoc,
   getDocs,
   updateDoc,
+  deleteDoc,
   doc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
@@ -37,11 +38,7 @@ export async function addTask() {
     createdAt: serverTimestamp()
   });
 
-  document.getElementById("taskTitle").value = "";
-  document.getElementById("taskAssignedTo").value = "";
-  document.getElementById("taskDueDate").value = "";
-  document.getElementById("taskNotes").value = "";
-
+  clearTaskForm();
   await loadTasks();
 }
 
@@ -69,45 +66,20 @@ export async function loadTasks() {
 
   const openTasks = tasks.filter(t => !t.completed);
 
-  if (openTasks.length === 0) {
-    openTasksDiv.innerHTML = "<p>No open tasks.</p>";
-  } else {
-    openTasks.slice(0, 5).forEach(task => {
-      openTasksDiv.innerHTML += renderTask(task, true);
-    });
-  }
+  openTasksDiv.innerHTML = openTasks.length
+    ? openTasks.slice(0, 5).map(task => renderTask(task, true)).join("")
+    : "<p>No open tasks.</p>";
 
-  if (tasks.length === 0) {
-    tasksDiv.innerHTML = "<p>No tasks yet.</p>";
-    return;
-  }
+  tasksDiv.innerHTML = tasks.length
+    ? tasks.map(task => renderTask(task, false)).join("")
+    : "<p>No tasks yet.</p>";
 
-  tasks.forEach(task => {
-    tasksDiv.innerHTML += renderTask(task, false);
-  });
-
-  document.querySelectorAll("[data-task-toggle]").forEach(button => {
-    button.onclick = async () => {
-      const id = button.getAttribute("data-task-toggle");
-      const completed = button.getAttribute("data-completed") === "true";
-
-      await updateDoc(doc(db, "tasks", id), {
-        completed: !completed,
-        completedAt: !completed ? serverTimestamp() : null,
-        completedBy: !completed ? auth.currentUser.email : null
-      });
-
-      await loadTasks();
-    };
-  });
+  setupTaskButtons();
 }
 
 function renderTask(task, compact) {
-  const checked = task.completed ? "checked" : "";
-  const statusClass = task.completed ? "completed" : "";
-
   return `
-    <div class="item task-item ${statusClass}">
+    <div class="item task-item ${task.completed ? "completed" : ""}">
       <div class="task-row">
         <button
           class="check-btn"
@@ -124,8 +96,49 @@ function renderTask(task, compact) {
           ${task.dueDate ? `<p>📅 Due: ${task.dueDate}</p>` : ""}
           ${task.notes && !compact ? `<p>📝 ${task.notes}</p>` : ""}
           <small>Added by ${task.createdBy || "unknown"}</small>
+
+          ${!compact ? `
+            <div class="action-row">
+              <button class="danger" data-task-delete="${task.id}">Delete</button>
+            </div>
+          ` : ""}
         </div>
       </div>
     </div>
   `;
+}
+
+function setupTaskButtons() {
+  document.querySelectorAll("[data-task-toggle]").forEach(button => {
+    button.onclick = async () => {
+      const id = button.getAttribute("data-task-toggle");
+      const completed = button.getAttribute("data-completed") === "true";
+
+      await updateDoc(doc(db, "tasks", id), {
+        completed: !completed,
+        completedAt: !completed ? serverTimestamp() : null,
+        completedBy: !completed ? auth.currentUser.email : null
+      });
+
+      await loadTasks();
+    };
+  });
+
+  document.querySelectorAll("[data-task-delete]").forEach(button => {
+    button.onclick = async () => {
+      const id = button.getAttribute("data-task-delete");
+
+      if (!confirm("Delete this task?")) return;
+
+      await deleteDoc(doc(db, "tasks", id));
+      await loadTasks();
+    };
+  });
+}
+
+function clearTaskForm() {
+  document.getElementById("taskTitle").value = "";
+  document.getElementById("taskAssignedTo").value = "";
+  document.getElementById("taskDueDate").value = "";
+  document.getElementById("taskNotes").value = "";
 }
