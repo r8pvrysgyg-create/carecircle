@@ -2,40 +2,73 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CareCircle</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <h1>🏡 CareCircle</h1>
+        <p>Family care coordination</p>
+      </div>
 
-  <h1>🏡 CareCircle</h1>
+      <div class="auth-area">
+        <span id="userEmail"></span>
+        <button id="loginBtn">Sign in with Google</button>
+        <button id="logoutBtn" class="secondary hidden">Logout</button>
+      </div>
+    </header>
 
-  <button id="loginBtn">Sign in with Google</button>
-  <button id="logoutBtn" style="display:none;">Logout</button>
+    <main id="appContent" class="hidden">
+      <section class="dashboard">
+        <div class="card">
+          <h2>📅 Today</h2>
+          <div id="todayAppointments"></div>
+        </div>
 
-  <p id="user"></p>
+        <div class="card">
+          <h2>📝 Recent Notes</h2>
+          <div id="recentNotes"></div>
+        </div>
+      </section>
 
-  <hr />
+      <section class="card">
+        <h2>➕ Add Appointment</h2>
 
-  <h2>📝 Family Notes</h2>
+        <div class="form-grid">
+          <input id="apptPerson" placeholder="Grandma / Grandpa" />
+          <input id="apptDoctor" placeholder="Doctor / Visit type" />
+          <input id="apptLocation" placeholder="Location" />
+          <input id="apptDriver" placeholder="Driver / Responsible person" />
+          <input id="apptDate" type="date" />
+          <input id="apptTime" type="time" />
+          <textarea id="apptNotes" placeholder="Notes"></textarea>
+        </div>
 
-  <input id="noteInput" placeholder="Write a note..." />
-  <button id="addNote">Add</button>
+        <button id="addAppt">Add Appointment</button>
 
-  <div id="notes"></div>
-<hr>
+        <h3>Upcoming Appointments</h3>
+        <div id="appointments"></div>
+      </section>
 
-<h2>📅 Appointments</h2>
+      <section class="card">
+        <h2>📝 Family Notes</h2>
 
-<input id="apptPerson" placeholder="Who (Grandma / Grandpa)" />
-<input id="apptDoctor" placeholder="Doctor / Visit type" />
-<input id="apptDate" type="date" />
-<input id="apptTime" type="time" />
+        <textarea id="noteInput" placeholder="Write a family update..."></textarea>
+        <button id="addNote">Add Note</button>
 
-<button id="addAppt">Add Appointment</button>
+        <div id="notes"></div>
+      </section>
+    </main>
 
-<div id="appointments"></div>
-  <!-- Firebase logic -->
-  <script type="module" src="script.js"></script>
+    <section id="signedOutMessage" class="signed-out">
+      <h2>Please sign in</h2>
+      <p>Only family members who sign in can view or add information.</p>
+    </section>
+  </div>
 
+  <script type="module" src="app.js"></script>
 </body>
 </html>
