@@ -8,7 +8,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
 import { auth, db } from "./firebase.js";
-
+ 
 export async function addTask() {
   const user = auth.currentUser;
 
