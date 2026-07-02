@@ -111,6 +111,7 @@ async function loadNotes() {
   });
 }
 document.getElementById("addAppt").onclick = async () => {
+  alert("New appointment code is running");
   const user = auth.currentUser;
 
   // 🚨 BLOCK NON-LOGGED USERS
