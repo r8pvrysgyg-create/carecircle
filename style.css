@@ -174,3 +174,14 @@ small {
 .task-item.completed strong {
   text-decoration: line-through;
 }
+.action-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+button.danger {
+  background: #ef4444;
+  color: white;
+}
